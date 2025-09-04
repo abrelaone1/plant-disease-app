@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Prediction Result</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body style="text-align:center; font-family:sans-serif;">
+<h2>🌱 Prediction Result</h2>
+<img src="{{ image_url }}" width="300"><br><br>
+<h3>{{ label }} ({{ confidence }}% confidence)</h3>
+<p><b>Explanation:</b> {{ explanation }}</p>
+<p><b>Suggestion:</b> {{ suggestion }}</p>
+<h3>📊 {{ label.split("___")[0] }} Disease Probabilities</h3>
+<canvas id="probChart" width="400" height="300"></canvas>
+<script>
+const labels = {{ probs.keys()|list|tojson }};
+const values = {{ probs.values()|list|tojson }};
+new Chart(document.getElementById('probChart'), {
+type:'bar',
+data:{labels:labels,datasets:[{label:'Confidence (%)',data:values.map(v=>v*100),backgroundColor:'rgba(75,192,192,0.6)',borderColor:'rgba(75,192,192,1)',borderWidth:1}]},
+options:{scales:{y:{beginAtZero:true,max:100}}}
+});
+</script>
+<br>
+<a href="{{ url_for('index') }}">🔄 Test Another Image</a>
+</body>
+</html>
